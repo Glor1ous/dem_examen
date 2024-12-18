@@ -1,0 +1,102 @@
+<!-- portal/templates/portal/admin_panel.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #007BFF;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: #fff;
+        }
+        .status-select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .status-select option {
+            padding: 10px;
+        }
+        .update-button {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .update-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Admin Panel</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>Car Number</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for report in reports %}
+        <tr>
+            <td>{{ report.user.first_name }} {{ report.user.last_name }}</td>
+            <td>{{ report.car_number }}</td>
+            <td>{{ report.description }}</td>
+            <td>
+                <select class="status-select" id="status-{{ report.id }}">
+                    <option value="new" {% if report.status == 'new' %}selected{% endif %}>New</option>
+                    <option value="confirmed" {% if report.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                    <option value="rejected" {% if report.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+            </td>
+            <td>
+                <button class="update-button" onclick="updateStatus({{ report.id }})">Update</button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function updateStatus(reportId) {
+        const status = document.getElementById(`status-${reportId}`).value;
+        window.location.href = `/update_status/${reportId}/${status}/`;
+    }
+</script>
+</body>
+</html>
